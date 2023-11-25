@@ -38,10 +38,11 @@ class AuthController extends GetxController {
       } else {
         // ignore: use_build_context_synchronously
         AwesomeDialog(
+          autoHide: const Duration(seconds: 3),
           context: context,
           dialogType: DialogType.info,
           animType: AnimType.rightSlide,
-          title: 'Please verify you account...!',
+          title: 'Please verify your account...!',
         ).show();
       }
     } on FirebaseAuthException catch (e) {

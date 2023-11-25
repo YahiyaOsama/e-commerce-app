@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:purchases/view/res/strings_manager.dart';
+import 'package:purchases/view/res/values_manager.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -17,6 +18,17 @@ class HomeScreen extends StatelessWidget {
               },
               icon: const Icon(Icons.login_sharp))
         ],
+      ),
+      body: SafeArea(
+        child: Container(
+          padding: const EdgeInsets.symmetric(
+            horizontal: AppPadding.p11,
+            vertical: AppPadding.p11,
+          ),
+          child: Column(
+            children: [],
+          ),
+        ),
       ),
     );
   }

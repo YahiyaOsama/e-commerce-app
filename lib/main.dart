@@ -26,10 +26,14 @@ class MyApp extends StatelessWidget {
         statusBarColor: Colors.grey.withOpacity(AppSiz.s0_1)));
     return GetMaterialApp(
         debugShowCheckedModeBanner: false,
-        initialRoute: (FirebaseAuth.instance.currentUser != null &&
-                FirebaseAuth.instance.currentUser!.emailVerified)
-            ? StringsManager.homeRoute
-            : StringsManager.loginRoute,
+        // initialRoute: (FirebaseAuth.instance.currentUser != null &&
+        //         FirebaseAuth.instance.currentUser!.emailVerified)
+        //     ? StringsManager.homeRoute
+        //     : StringsManager.loginRoute,
+        initialRoute: StringsManager.homeRoute,
+        // initialRoute: FirebaseAuth.instance.currentUser == null
+        //     ? StringsManager.loginRoute
+        //     : StringsManager.homeRoute,
         initialBinding: Binding(),
         getPages: [
           GetPage(

@@ -1,5 +1,6 @@
 // ignore_for_file: avoid_print
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:purchases/controller/auth_controller.dart';
@@ -17,7 +18,7 @@ class LoginScreen extends GetWidget<AuthController> {
   LoginScreen({super.key});
 
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
-  TextEditingController emailController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -76,19 +77,10 @@ class LoginScreen extends GetWidget<AuthController> {
                             print("email error");
                           }
                           return null;
-                          // if (value!.isEmpty ||
-                          //     !RegExp(r'^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$')
-                          //         .hasMatch(value)) {
-                          //   return "enter correct email";
-                          //   // Get.snackbar("Error", "check your email..!");
-                          // } else {
-                          //   return null;
-                          // }
                         },
                       ),
                       AppSiz.s30.mh,
                       CustomTextFormField(
-                        // textEditingController: passwordController,
                         text: 'Password',
                         textInputType: TextInputType.visiblePassword,
                         obscure: true,
@@ -100,28 +92,23 @@ class LoginScreen extends GetWidget<AuthController> {
                             print("error");
                           }
                           return null;
-                          // if (value!.isEmpty) {
-                          //   // Get.snackbar("Error", "Check Your password..!",
-                          //   //     snackPosition: SnackPosition.BOTTOM,
-                          //   //     margin: const EdgeInsets.only(
-                          //   //       bottom: 10,
-                          //   //       left: 10,
-                          //   //       right: 10,
-                          //   //     ));
-                          //   return "enter correct password";
-                          // } else {
-                          //   return null;
-                          // }
                         },
                       ),
                       AppSiz.s10.mh,
-                      GestureDetector(
-                        onTap: () {
-                          if (emailController.text.isEmpty) {
-                            print("email is empty");
+                      InkWell(
+                        onTap: () async {
+                          if (emailController.text == "") {
+                            Get.snackbar("error", "email empty");
                             return;
                           }
-                          controller.resetPasswordFirebase();
+                          try {
+                            await FirebaseAuth.instance.sendPasswordResetEmail(
+                              email: emailController.text,
+                            );
+                            print("email reset password send");
+                          } catch (e) {
+                            print(e);
+                          }
                         },
                         child: Container(
                             padding: const EdgeInsets.only(
