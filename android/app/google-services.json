@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "525069138427",
+    "project_id": "e-commerce-app-afa2e",
+    "storage_bucket": "e-commerce-app-afa2e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:525069138427:android:e8869107f8c9136f45335e",
+        "android_client_info": {
+          "package_name": "com.example.purchases"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCvErekFw8fViLhbJkaJumJHWw6kX5DRYA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
