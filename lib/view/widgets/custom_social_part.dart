@@ -1,13 +1,10 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 import 'package:purchases/controller/auth_controller.dart';
 import 'package:purchases/view/res/extension.dart';
 import '../res/assets_manager.dart';
 import '../res/color_manager.dart';
-import '../res/strings_manager.dart';
 import '../res/values_manager.dart';
 
 class CustomSocialPart extends GetWidget<AuthController> {
@@ -64,7 +61,7 @@ class CustomSocialPart extends GetWidget<AuthController> {
               Expanded(
                 child: GestureDetector(
                   onTap: () {
-                    controller.signInWithFacebookFirebase();
+                    // controller.signInWithFacebookFirebase();
                   },
                   child: Container(
                     height: AppSiz.s50,

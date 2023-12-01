@@ -12,17 +12,19 @@ class CustomTextFormField extends StatelessWidget {
     required this.textInputType,
     required this.obscure,
     this.validator,
-    this.onSave,
+    this.onChange,
     this.inputFormatters,
+    this.icon,
   });
 
   final List<TextInputFormatter>? inputFormatters;
   final String? Function(String?)? validator;
-  final Function(String?)? onSave;
+  final Function(String?)? onChange;
   final TextEditingController? textEditingController;
   final String text;
   final TextInputType textInputType;
   final bool obscure;
+  final Icon? icon;
 
   @override
   Widget build(BuildContext context) {
@@ -40,13 +42,14 @@ class CustomTextFormField extends StatelessWidget {
         ],
       ),
       child: TextFormField(
-        onSaved: onSave,
+        onChanged: onChange,
         inputFormatters: inputFormatters,
         validator: validator,
         controller: textEditingController,
         obscureText: obscure,
         keyboardType: textInputType,
         decoration: InputDecoration(
+          suffixIcon: icon,
           hintText: text,
           border: InputBorder.none,
           contentPadding: const EdgeInsets.only(top: 12, left: 10),

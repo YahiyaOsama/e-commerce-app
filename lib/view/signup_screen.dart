@@ -102,7 +102,7 @@ class SignupScreen extends GetWidget<AuthController> {
                               text: 'Enter Your name',
                               textInputType: TextInputType.name,
                               obscure: false,
-                              onSave: (value) {
+                              onChange: (value) {
                                 controller.name = value!;
                               },
                               validator: (value) {
@@ -126,7 +126,7 @@ class SignupScreen extends GetWidget<AuthController> {
                               text: 'Enter Your Age',
                               textInputType: TextInputType.datetime,
                               obscure: false,
-                              onSave: (value) {
+                              onChange: (value) {
                                 controller.age = value!;
                               },
                               validator: (value) {
@@ -144,7 +144,7 @@ class SignupScreen extends GetWidget<AuthController> {
                         text: 'Enter your email',
                         textInputType: TextInputType.emailAddress,
                         obscure: false,
-                        onSave: (value) {
+                        onChange: (value) {
                           controller.email = value!;
                         },
                         validator: (value) {
@@ -159,7 +159,7 @@ class SignupScreen extends GetWidget<AuthController> {
                         text: 'Enter Your password',
                         textInputType: TextInputType.visiblePassword,
                         obscure: true,
-                        onSave: (value) {
+                        onChange: (value) {
                           controller.password = value!;
                         },
                         validator: (value) {
@@ -177,7 +177,7 @@ class SignupScreen extends GetWidget<AuthController> {
                               text: 'Enter your Width',
                               textInputType: TextInputType.number,
                               obscure: false,
-                              onSave: (value) {
+                              onChange: (value) {
                                 controller.width = value!;
                               },
                               validator: (value) {
@@ -194,7 +194,7 @@ class SignupScreen extends GetWidget<AuthController> {
                               text: 'Enter Your Height',
                               textInputType: TextInputType.number,
                               obscure: false,
-                              onSave: (value) {
+                              onChange: (value) {
                                 controller.height = value!;
                               },
                               validator: (value) {

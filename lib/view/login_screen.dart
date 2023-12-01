@@ -1,7 +1,7 @@
 // ignore_for_file: avoid_print
 
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:purchases/controller/auth_controller.dart';
 import 'package:purchases/view/res/assets_manager.dart';
@@ -22,6 +22,8 @@ class LoginScreen extends GetWidget<AuthController> {
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+        statusBarColor: Colors.grey.withOpacity(AppSiz.s0_1)));
     return Scaffold(
       backgroundColor: ColorManager.whiteColor,
       body: SafeArea(
@@ -69,8 +71,9 @@ class LoginScreen extends GetWidget<AuthController> {
                         textInputType: TextInputType.emailAddress,
                         obscure: false,
                         textEditingController: emailController,
-                        onSave: (value) {
+                        onChange: (value) {
                           controller.email = value!;
+                          print(controller.email);
                         },
                         validator: (value) {
                           if (value == null) {
@@ -84,7 +87,7 @@ class LoginScreen extends GetWidget<AuthController> {
                         text: 'Password',
                         textInputType: TextInputType.visiblePassword,
                         obscure: true,
-                        onSave: (value) {
+                        onChange: (value) {
                           controller.password = value!;
                         },
                         validator: (value) {
@@ -96,19 +99,8 @@ class LoginScreen extends GetWidget<AuthController> {
                       ),
                       AppSiz.s10.mh,
                       InkWell(
-                        onTap: () async {
-                          if (emailController.text == "") {
-                            Get.snackbar("error", "email empty");
-                            return;
-                          }
-                          try {
-                            await FirebaseAuth.instance.sendPasswordResetEmail(
-                              email: emailController.text,
-                            );
-                            print("email reset password send");
-                          } catch (e) {
-                            print(e);
-                          }
+                        onTap: () {
+                          controller.resetPasswordFirebase();
                         },
                         child: Container(
                             padding: const EdgeInsets.only(

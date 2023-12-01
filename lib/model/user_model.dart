@@ -11,10 +11,7 @@ class UserModel {
     this.height,
   });
 
-  UserModel.fromJson(Map<dynamic, dynamic> map) {
-    if (map == null) {
-      return;
-    }
+  UserModel.fromJson(Map<String, dynamic> map) {
     userId = map['userId'];
     name = map['name'];
     email = map['email'];
@@ -24,7 +21,7 @@ class UserModel {
     age = map['age'];
   }
 
-  toJson() {
+  Map<String, dynamic> toJson() {
     return {
       "userId": userId,
       "name": name,

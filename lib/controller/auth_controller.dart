@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:purchases/controller/services/firestore_user.dart';
+import 'package:purchases/model/user_model.dart';
 
 import '../view/res/strings_manager.dart';
 
@@ -22,19 +24,34 @@ class AuthController extends GetxController {
   final GoogleSignIn _googleSignIn = GoogleSignIn(scopes: ['email']);
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FacebookAuth _facebookAuth = FacebookAuth.instance;
-  late String email, password, name, age, width, height;
+  String? email, password, name, age, width, height;
 
-  // late int age, width, height;
+  final Rx<User?> _user = Rx<User?>(null);
+
+  String? get user => _user.value?.email;
+
+  @override
+  void onInit() {
+    // _user.bindStream(_auth.authStateChanges());
+    _user.value = _auth.currentUser;
+    super.onInit();
+  }
 
   void signInWithEmailAndPasswordFirebase(
       {required BuildContext context}) async {
+    if (email == null ||
+        email!.isEmpty && password == null ||
+        password!.isEmpty) {
+      Get.snackbar("Error", "Complete Your email and password..!");
+      return;
+    }
     try {
       final credential = await _auth.signInWithEmailAndPassword(
-        email: email,
-        password: password,
+        email: email!,
+        password: password!,
       );
       if (credential.user!.emailVerified) {
-        Get.offNamed(StringsManager.homeRoute);
+        Get.offNamed(StringsManager.startRoute);
       } else {
         // ignore: use_build_context_synchronously
         AwesomeDialog(
@@ -57,13 +74,19 @@ class AuthController extends GetxController {
 
   //
   Future<void> createAccountWithEmailAndPasswordFirebase() async {
+    if (email == null ||
+        email!.isEmpty && password == null ||
+        password!.isEmpty) {
+      return;
+    }
     try {
-      await _auth.createUserWithEmailAndPassword(
-        email: email,
-        password: password,
+      final cred = await _auth.createUserWithEmailAndPassword(
+        email: email!,
+        password: password!,
       );
+      saveUser(cred);
       _auth.currentUser!.sendEmailVerification();
-      Get.offAllNamed(StringsManager.loginRoute);
+      Get.offNamed(StringsManager.loginRoute);
     } on FirebaseAuthException catch (e) {
       Get.snackbar(
         "Error During Create Account..!",
@@ -87,27 +110,32 @@ class AuthController extends GetxController {
       accessToken: googleAuth.accessToken,
       idToken: googleAuth.idToken,
     );
-    await _auth.signInWithCredential(credential);
-    Get.offNamed(StringsManager.homeRoute);
+    await _auth.signInWithCredential(credential).then((user) => saveUser(user));
+    Get.offNamed(StringsManager.startRoute);
   }
 
   //
-  Future<UserCredential> signInWithFacebookFirebase() async {
-    final LoginResult loginResult = await _facebookAuth.login();
-    final OAuthCredential facebookAuthCredential =
-        FacebookAuthProvider.credential(loginResult.accessToken!.token);
-    return FirebaseAuth.instance.signInWithCredential(facebookAuthCredential);
-  }
+  // Future<void> signInWithFacebookFirebase() async {
+  //   final LoginResult loginResult = await _facebookAuth.login();
+  //   final accessToken = loginResult.accessToken!.token;
+  //   if(loginResult.status ==FacebookLoginStatues.loggedIn){
+  //     final faceCredential = FacebookAuthProvider.credential(accessToken);
+  //     await _auth.signInWithCredential(faceCredential).then((user) => saveUser(user));
+  //   }
+  //   final OAuthCredential facebookAuthCredential =
+  //       FacebookAuthProvider.credential(loginResult.accessToken!.token);
+  // }
 
   //
   Future<void> resetPasswordFirebase() async {
-    if (email.isEmpty) {
+    print(email);
+    if (email == null || email!.isEmpty) {
       return;
     }
     try {
-      await _auth.sendPasswordResetEmail(email: email);
+      await _auth.sendPasswordResetEmail(email: email!);
       Get.snackbar(
-        "",
+        "Rest Password Email Send.",
         "Check Your Email Please..!",
         margin: const EdgeInsets.only(left: 15, right: 15, bottom: 10),
         // maxWidth: 200,
@@ -120,5 +148,18 @@ class AuthController extends GetxController {
         snackPosition: SnackPosition.TOP,
       );
     }
+  }
+
+  //
+  Future<void> saveUser(UserCredential credential) async {
+    await FirestoreUser().addUserToFireStore(UserModel(
+      userId: credential.user!.uid,
+      email: credential.user!.email,
+      name: name ?? credential.user!.displayName,
+      age: age ?? "",
+      pic: "",
+      height: height ?? "",
+      width: width ?? "",
+    ));
   }
 }

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-extension Padding on num {
+extension PaddingExtension on num {
   SizedBox get ph => SizedBox(
         height: toDouble(),
       );
