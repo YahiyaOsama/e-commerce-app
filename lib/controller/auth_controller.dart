@@ -1,11 +1,13 @@
 // ignore_for_file: avoid_print
 
+import 'dart:io';
+
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:purchases/controller/services/firestore_user.dart';
 import 'package:purchases/model/user_model.dart';
 
@@ -23,20 +25,51 @@ enum AuthStatues {
 class AuthController extends GetxController {
   final GoogleSignIn _googleSignIn = GoogleSignIn(scopes: ['email']);
   final FirebaseAuth _auth = FirebaseAuth.instance;
-  final FacebookAuth _facebookAuth = FacebookAuth.instance;
-  String? email, password, name, age, width, height;
+  String? email, password, name, age, weight, height;
 
-  final Rx<User?> _user = Rx<User?>(null);
+  // final FacebookAuth _facebookAuth = FacebookAuth.instance;
 
   String? get user => _user.value?.email;
+  final Rx<User?> _user = Rx<User?>(null);
+
+  File? get profileImage => _pickedFile.value;
+  Rx<File?> _pickedFile = Rx<File?>(null);
 
   @override
   void onInit() {
-    // _user.bindStream(_auth.authStateChanges());
-    _user.value = _auth.currentUser;
     super.onInit();
+    _user.bindStream(_auth.authStateChanges());
   }
 
+  @override
+  void onReady() {
+    // TODO: implement onReady
+    super.onReady();
+  }
+
+  @override
+  void onClose() {
+    // TODO: implement onClose
+    super.onClose();
+  }
+
+  Future<void> chooseImageFromGallery() async {
+    final pickedImage =
+        await ImagePicker().pickImage(source: ImageSource.gallery);
+    if (pickedImage == null) {
+      return;
+    }
+    Get.snackbar(
+      "Profile Image.!",
+      "You have successfully select your profile image",
+      margin: const EdgeInsets.only(left: 13, right: 13, bottom: 10),
+      snackPosition: SnackPosition.BOTTOM,
+    );
+    _pickedFile = Rx<File?>(File(pickedImage.path));
+    update();
+  }
+
+  //
   void signInWithEmailAndPasswordFirebase(
       {required BuildContext context}) async {
     if (email == null ||
@@ -104,14 +137,18 @@ class AuthController extends GetxController {
     if (googleUser == null) {
       return;
     }
-    final GoogleSignInAuthentication googleAuth =
+    GoogleSignInAuthentication googleSignInAuthentication =
         await googleUser.authentication;
-    final credential = GoogleAuthProvider.credential(
-      accessToken: googleAuth.accessToken,
-      idToken: googleAuth.idToken,
+
+    final AuthCredential credential = GoogleAuthProvider.credential(
+      idToken: googleSignInAuthentication.idToken,
+      accessToken: googleSignInAuthentication.accessToken,
     );
-    await _auth.signInWithCredential(credential).then((user) => saveUser(user));
-    Get.offNamed(StringsManager.startRoute);
+
+    await _auth.signInWithCredential(credential).then((user) {
+      saveUser(user);
+      Get.offAllNamed(StringsManager.startRoute);
+    });
   }
 
   //
@@ -159,7 +196,7 @@ class AuthController extends GetxController {
       age: age ?? "",
       pic: "",
       height: height ?? "",
-      width: width ?? "",
+      weight: weight ?? "",
     ));
   }
 }

@@ -14,6 +14,7 @@ class AssetManager {
   static const String bottomNavBarHomeIcon = "$imagePath/Icon_Explore.svg";
   static const String bottomNavBarCartIcon = "$imagePath/Icon_Cart.svg";
   static const String bottomNavBarProfileIcon = "$imagePath/Icon_User.svg";
+  static const String product = "$imagePath/Image.png";
 
   static const Icon menuIcon = Icon(Icons.menu);
 }

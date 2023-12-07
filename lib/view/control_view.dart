@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:purchases/controller/auth_controller.dart';
-import 'package:purchases/controller/home_controller.dart';
+import 'package:purchases/controller/main_controller.dart';
 import 'package:purchases/view/login_screen.dart';
 
 import 'res/assets_manager.dart';
@@ -17,8 +17,8 @@ class ControlView extends GetWidget<AuthController> {
     return Obx(() {
       return (Get.find<AuthController>().user == null)
           ? LoginScreen()
-          : GetBuilder<HomeController>(
-              id: 'rootContainerScreen',
+          : GetBuilder<MainController>(
+              // id: 'rootContainerScreen',
               builder: (controller) {
                 // print("Current Screen ${controller.currentScreen.runtimeType}");
                 return Scaffold(
@@ -32,12 +32,13 @@ class ControlView extends GetWidget<AuthController> {
   }
 
   bottomNavigationBar() {
-    return GetBuilder<HomeController>(
-      id: 'bottomNavBarId',
+    return GetBuilder<MainController>(
+      // id: 'bottomNavBarId',
+      init: MainController(),
       builder: (controller) {
         return BottomNavigationBar(
           backgroundColor: Colors.white,
-          elevation: 0,
+          elevation: 5,
           selectedItemColor: ColorManager.blackColor,
           items: [
             BottomNavigationBarItem(
@@ -101,7 +102,7 @@ class ControlView extends GetWidget<AuthController> {
               ),
             ),
           ],
-          currentIndex: controller.navValue,
+          currentIndex: controller.navigatorValue,
           onTap: (i) {
             controller.changeSelectedValue(i);
           },

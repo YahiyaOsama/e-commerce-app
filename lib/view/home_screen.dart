@@ -1,17 +1,15 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:purchases/controller/home_controller.dart';
 import 'package:purchases/view/res/assets_manager.dart';
 import 'package:purchases/view/res/color_manager.dart';
 import 'package:purchases/view/res/extension.dart';
-import 'package:purchases/view/res/strings_manager.dart';
 import 'package:purchases/view/res/values_manager.dart';
 
-class HomeScreen extends GetWidget<HomeController> {
+class HomeScreen extends StatelessWidget {
   HomeScreen({super.key});
 
-  FirebaseAuth auth = FirebaseAuth.instance;
   final List<String> names = <String>[
     'Men',
     'Woman',
@@ -22,73 +20,107 @@ class HomeScreen extends GetWidget<HomeController> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: SingleChildScrollView(
-        child: Container(
-          padding: const EdgeInsets.symmetric(
-            horizontal: AppPadding.p19,
-            vertical: AppPadding.p13,
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              10.mh,
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const Text("Home Screen"),
-                  IconButton(
-                      onPressed: () {
-                        auth.signOut();
-                        Get.offNamed(StringsManager.loginRoute);
-                      },
-                      icon: const Icon(Icons.login_sharp))
-                ],
-              ),
-              20.mh,
-              searchSection(),
-              30.mh,
-              const Text(
-                "Categories",
-                style: TextStyle(
-                  fontSize: AppSiz.s20,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-              20.mh,
-              categoriesSection(),
-              10.mh,
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "Best Selling",
-                    style: TextStyle(
-                      color: ColorManager.blackColor,
-                      fontSize: AppSiz.s18,
+    SystemChrome.setSystemUIOverlayStyle(
+        const SystemUiOverlayStyle(statusBarColor: Colors.white));
+
+    return GetBuilder<HomeController>(
+      init: Get.find<HomeController>(),
+      builder: (controller) {
+        return controller.isLoading.value
+            ? const Center(child: CircularProgressIndicator())
+            : SafeArea(
+                child: SingleChildScrollView(
+                  child: Container(
+                    padding: const EdgeInsets.only(
+                      left: AppPadding.p19,
+                      right: AppPadding.p19,
+                      top: AppPadding.p13,
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              "Hi Yahiya,",
+                              style: TextStyle(
+                                fontSize: AppSiz.s25,
+                                fontWeight: FontWeight.w600,
+                                color: ColorManager.textColor,
+                              ),
+                            ),
+                            Container(
+                              clipBehavior: Clip.antiAlias,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(50),
+                              ),
+                              child: Image.asset(
+                                AssetManager.profileAvatar,
+                                width: 50,
+                              ),
+                            ),
+                          ],
+                        ),
+                        // Row(
+                        //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        //   children: [
+                        //     const Text("Home Screen"),
+                        //     IconButton(
+                        //         onPressed: () {
+                        //           auth.signOut();
+                        //           Get.offNamed(StringsManager.loginRoute);
+                        //         },
+                        //         icon: const Icon(Icons.login_sharp))
+                        //   ],
+                        // ),
+                        // searchSection(),
+                        15.mh,
+                        const Text(
+                          "Recommendations",
+                          style: TextStyle(
+                            fontSize: AppSiz.s20,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                        15.mh,
+                        productSection(),
+                        20.mh,
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              "Best Selling",
+                              style: TextStyle(
+                                color: ColorManager.blackColor,
+                                fontSize: AppSiz.s18,
+                              ),
+                            ),
+                            Container(
+                              padding:
+                                  const EdgeInsets.only(left: 20, right: 15),
+                              child: GestureDetector(
+                                onTap: () {},
+                                child: Text(
+                                  "See All",
+                                  style: TextStyle(
+                                    color:
+                                        ColorManager.primary.withOpacity(0.7),
+                                    fontSize: AppSiz.s18,
+                                  ),
+                                ),
+                              ),
+                            )
+                          ],
+                        ),
+                        15.mh,
+                        productSection(),
+                      ],
                     ),
                   ),
-                  Container(
-                    padding: const EdgeInsets.all(20),
-                    child: GestureDetector(
-                      onTap: () {},
-                      child: Text(
-                        "See All",
-                        style: TextStyle(
-                          color: ColorManager.primary.withOpacity(0.7),
-                          fontSize: AppSiz.s18,
-                        ),
-                      ),
-                    ),
-                  )
-                ],
-              ),
-              5.mh,
-              productSection(),
-            ],
-          ),
-        ),
-      ),
+                ),
+              );
+      },
     );
   }
 
@@ -116,41 +148,10 @@ class HomeScreen extends GetWidget<HomeController> {
     );
   }
 
-  categoriesSection() {
-    return SizedBox(
-      height: 120,
-      child: ListView.separated(
-        itemCount: names.length,
-        scrollDirection: Axis.horizontal,
-        itemBuilder: (context, i) {
-          return Column(
-            children: [
-              Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(AppSiz.s50),
-                  color: Colors.grey.shade100,
-                ),
-                height: 70,
-                width: 70,
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Image.asset(AssetManager.iconMensShoe),
-                ),
-              ),
-              15.mh,
-              Text(names[i]),
-            ],
-          );
-        },
-        separatorBuilder: (BuildContext context, int index) => 20.mw,
-      ),
-    );
-  }
-
   productSection() {
     return Container(
-      padding: const EdgeInsets.only(left: 10, right: 10),
-      height: 300,
+      padding: const EdgeInsets.only(left: 5, right: 5),
+      height: 280,
       child: ListView.separated(
         itemCount: names.length,
         scrollDirection: Axis.horizontal,
@@ -159,7 +160,7 @@ class HomeScreen extends GetWidget<HomeController> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SizedBox(
-                height: 220,
+                height: 200,
                 child: Image.asset(
                   AssetManager.oneProduct,
                   fit: BoxFit.cover,
@@ -169,7 +170,7 @@ class HomeScreen extends GetWidget<HomeController> {
               Text(
                 "Beoplay Speaker",
                 style: TextStyle(
-                  fontSize: AppSiz.s18,
+                  fontSize: AppSiz.s16,
                   fontWeight: FontWeight.w500,
                   color: ColorManager.blackColor,
                 ),
@@ -178,7 +179,7 @@ class HomeScreen extends GetWidget<HomeController> {
               Text(
                 "Bang and Olufsen",
                 style: TextStyle(
-                  fontSize: AppSiz.s16,
+                  fontSize: AppSiz.s14,
                   fontWeight: FontWeight.w400,
                   color: ColorManager.textColor,
                 ),
@@ -187,7 +188,7 @@ class HomeScreen extends GetWidget<HomeController> {
               Text(
                 "755 EGP",
                 style: TextStyle(
-                  fontSize: AppSiz.s16,
+                  fontSize: AppSiz.s14,
                   fontWeight: FontWeight.w400,
                   color: ColorManager.primary.withOpacity(0.7),
                 ),

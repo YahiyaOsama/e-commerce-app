@@ -1,6 +1,9 @@
 // ignore_for_file: avoid_print
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:purchases/controller/auth_controller.dart';
 import 'package:purchases/view/res/assets_manager.dart';
 import 'package:purchases/view/res/color_manager.dart';
@@ -16,6 +19,13 @@ class SignupScreen extends GetWidget<AuthController> {
   SignupScreen({super.key});
 
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  File? file;
+
+  getImage() async {
+    final imageGallery =
+        await ImagePicker().pickImage(source: ImageSource.gallery);
+    file = File(imageGallery!.path);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -66,33 +76,59 @@ class SignupScreen extends GetWidget<AuthController> {
                         ],
                       ),
                       60.mh,
-                      GestureDetector(
-                        onTap: () {
-                          print("pick your img now!!!");
+                      GetBuilder<AuthController>(
+                        builder: (controller) {
+                          return GestureDetector(
+                            onTap: () async {
+                              await controller.chooseImageFromGallery();
+                              print("picked image Know");
+                            },
+                            child: Container(
+                              alignment: Alignment.center,
+                              child: Stack(
+                                alignment: Alignment.bottomRight,
+                                children: [
+                                  Container(
+                                    width: 100,
+                                    height: 100,
+                                    decoration: const BoxDecoration(
+                                      color: Colors.transparent,
+                                    ),
+                                    child: controller.profileImage == null
+                                        ? const Image(
+                                            image: AssetImage(
+                                                AssetManager.profileAvatar),
+                                          )
+                                        : ClipRect(
+                                            clipBehavior: Clip.antiAlias,
+                                            child: Container(
+                                              clipBehavior: Clip.antiAlias,
+                                              decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(50),
+                                              ),
+                                              child: Image.file(
+                                                fit: BoxFit.cover,
+                                                isAntiAlias: true,
+                                                controller.profileImage!,
+                                              ),
+                                            )),
+                                  ),
+                                  Container(
+                                    width: 35,
+                                    height: 35,
+                                    decoration: BoxDecoration(
+                                        color: ColorManager.whiteColor,
+                                        borderRadius:
+                                            BorderRadius.circular(100)),
+                                    child:
+                                        const Icon(Icons.camera_alt_outlined),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          );
                         },
-                        child: Container(
-                          alignment: Alignment.center,
-                          child: Stack(
-                            alignment: Alignment.bottomRight,
-                            children: [
-                              const CircleAvatar(
-                                radius: 42,
-                                backgroundColor: Colors.transparent,
-                                child: Image(
-                                  image: AssetImage(AssetManager.profileAvatar),
-                                ),
-                              ),
-                              Container(
-                                width: 35,
-                                height: 35,
-                                decoration: BoxDecoration(
-                                    color: ColorManager.whiteColor,
-                                    borderRadius: BorderRadius.circular(100)),
-                                child: const Icon(Icons.camera_alt_outlined),
-                              ),
-                            ],
-                          ),
-                        ),
                       ),
                       40.mh,
                       Row(
@@ -174,15 +210,15 @@ class SignupScreen extends GetWidget<AuthController> {
                         children: [
                           Expanded(
                             child: CustomTextFormField(
-                              text: 'Enter your Width',
+                              text: 'Enter your weight',
                               textInputType: TextInputType.number,
                               obscure: false,
                               onChange: (value) {
-                                controller.width = value!;
+                                controller.weight = value!;
                               },
                               validator: (value) {
                                 if (value == null) {
-                                  print("width error");
+                                  print("weight error");
                                 }
                                 return;
                               },

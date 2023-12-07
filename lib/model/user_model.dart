@@ -1,5 +1,5 @@
 class UserModel {
-  String? userId, name, email, pic, width, height, age;
+  String? userId, name, email, pic, weight, height, age;
 
   UserModel({
     this.userId,
@@ -7,7 +7,7 @@ class UserModel {
     this.email,
     this.pic,
     this.age,
-    this.width,
+    this.weight,
     this.height,
   });
 
@@ -16,7 +16,7 @@ class UserModel {
     name = map['name'];
     email = map['email'];
     pic = map['pic'];
-    width = map['width'];
+    weight = map['weight'];
     height = map['height'];
     age = map['age'];
   }
@@ -27,7 +27,7 @@ class UserModel {
       "name": name,
       "email": email,
       "pic": pic,
-      "width": width,
+      "weight": weight,
       "height": height,
       "age": age,
     };
