@@ -9,10 +9,10 @@ import 'package:purchases/view/res/color_manager.dart';
 import 'package:purchases/view/res/extension.dart';
 import 'package:purchases/view/res/values_manager.dart';
 import 'package:purchases/view/widgets/custom_social_part.dart';
-import 'res/strings_manager.dart';
-import 'widgets/custom_button.dart';
-import 'widgets/custom_clipper.dart';
-import 'widgets/custom_text_field.dart';
+import '../res/strings_manager.dart';
+import '../widgets/custom_button.dart';
+import '../widgets/custom_clipper.dart';
+import '../widgets/custom_text_field.dart';
 
 class LoginScreen extends GetWidget<AuthController> {
   LoginScreen({super.key});

@@ -3,7 +3,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:purchases/controller/auth_controller.dart';
 import 'package:purchases/controller/main_controller.dart';
-import 'package:purchases/view/login_screen.dart';
+import 'package:purchases/view/registration/login_screen.dart';
 
 import 'res/assets_manager.dart';
 import 'res/color_manager.dart';

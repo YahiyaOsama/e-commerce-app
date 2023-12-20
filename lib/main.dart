@@ -2,10 +2,10 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:purchases/view/control_view.dart';
-import 'package:purchases/view/login_screen.dart';
+import 'package:purchases/view/registration/login_screen.dart';
 import 'package:purchases/view/product_details.dart';
 import 'package:purchases/view/res/strings_manager.dart';
-import 'package:purchases/view/signup_screen.dart';
+import 'package:purchases/view/registration/signup_screen.dart';
 import 'package:purchases/view/home_screen.dart';
 import 'controller/utils/binding.dart';
 
@@ -44,7 +44,7 @@ class MyApp extends StatelessWidget {
         ),
         GetPage(
           name: StringsManager.homeRoute,
-          page: () => HomeScreen(),
+          page: () => const HomeScreen(),
         ),
         GetPage(
           name: StringsManager.productDetailsRoute,

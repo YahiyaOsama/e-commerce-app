@@ -13,7 +13,7 @@ import 'package:purchases/view/res/values_manager.dart';
 import 'package:purchases/view/widgets/custom_button.dart';
 import 'package:purchases/view/widgets/custom_text_field.dart';
 
-import 'widgets/custom_clipper.dart';
+import '../widgets/custom_clipper.dart';
 
 class SignupScreen extends GetWidget<AuthController> {
   SignupScreen({super.key});

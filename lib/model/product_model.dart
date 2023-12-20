@@ -1,32 +1,28 @@
 class ProductModel {
-  late String name, image, gender, id, weight, price;
+  String? name, image, description, sized, price;
 
-  ProductModel({
-    required this.name,
-    required this.image,
-    required this.id,
-    required this.gender,
-    required this.price,
-    required this.weight,
-  });
+  ProductModel(
+      {this.name, this.image, this.description, this.sized, this.price});
 
   ProductModel.fromJson(Map<dynamic, dynamic> map) {
+    if (map.isEmpty) {
+      return;
+    }
+
     name = map['name'];
     image = map['image'];
-    id = map['id'];
-    gender = map['gender'];
+    description = map['description'];
+    sized = map['sized'];
     price = map['price'];
-    weight = map['weight'];
   }
 
   Map<String, dynamic> toJson() {
     return {
       'name': name,
       'image': image,
-      'id': id,
-      'gender': gender,
+      'description': description,
+      'sized': sized,
       'price': price,
-      'weight': weight,
     };
   }
 }
